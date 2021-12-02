@@ -38,7 +38,7 @@ render() {
     <div className="App">
         <Layout>
           <Header>
-             <Menu mode="horizontal" onClick={this.handleClick} selectedKeys={[ current.key ]}>
+             <Menu theme="dark" mode="horizontal" onClick={this.handleClick} selectedKeys={[ current.key ]}>
                { this.pages.map( page => (
                  <Menu.Item key={page.key}>{page.name}</Menu.Item>
                )) }
