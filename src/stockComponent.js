@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { Table , Avatar, Space} from 'antd';
+import { message, Table , Avatar, Space} from 'antd';
 
 import StockInputComponent from './stockInputComponent';
 
@@ -20,7 +20,7 @@ class stockComponent extends React.Component {
             dataIndex: 'iconUrl',
             key: 'icon',
             render: url => (
-                <Avatar src={url} />
+                <Avatar src={url} shape='square' style={{ imageRendering: 'pixelated' }}/>
             ),
         },
         {
@@ -58,15 +58,25 @@ class stockComponent extends React.Component {
     fetchData() {
         this.setState({ ...this.state, isFetching: true })
         axios.get('https://mc-base.azurewebsites.net/api/stockItems?code=krAXisqkgHEWfgVkwkYAwHyumeE302koi80bw/tuaZXJ/f85DyMqaw==').then( req => {
-            console.log(req.data);
             const stockData = req.data.map( item => {
                 return { 
                     ...item, 
-                    iconUrl: 'https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Iron_Ingot_JE3_BE2.png',
+                    iconUrl: 'https://minecraftresources.blob.core.windows.net/icons/' + encodeURIComponent(item.itemId) + '.png',
                 }
             })
             this.setState({ ...this.state, isFetching: false, stock: stockData })
         }) 
+    }
+
+    addStockItem(item) {
+        axios.post('https://mc-base.azurewebsites.net/api/stockItems?code=krAXisqkgHEWfgVkwkYAwHyumeE302koi80bw/tuaZXJ/f85DyMqaw==', item).then(req => {
+            if(req.status === 200) {
+                message.success(req.data);
+                this.setState({ ...this.state, stock: [...this.state.stock, item] })
+            } else {
+                message.error(req.status);
+            }
+        });
     }
 
     componentDidMount() {
@@ -76,11 +86,12 @@ class stockComponent extends React.Component {
     render() {
         return (
             <div>
-                < StockInputComponent />
+                < StockInputComponent addStockItem={this.addStockItem} />
                 <Table
                     columns={this.columns}
                     dataSource={ this.state.stock }
                     loading={ this.state.isFetching }
+                    rowKey={record => record.itemId}
                 ></Table>
             </div>
         )
