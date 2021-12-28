@@ -164,8 +164,8 @@ class StockTableComponent extends React.Component {
         });
     }
 
-    delete() {
-        
+    delete(itemId) {
+       this.props.deleteStockItem(itemId);
     }
 
     save = async (key, row) => {
