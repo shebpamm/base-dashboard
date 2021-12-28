@@ -111,8 +111,11 @@ class stockInputComponent extends React.Component {
                     <AutoComplete 
                         style={{ width: 200 }} 
                         options={this.state.itemIDOptions} 
+                        
                         onSearch={this.onSearch.bind(this)}
                         onSelect={this.onSelect.bind(this)}
+                        onBlur={() => { this.setState({ ...this.state, keepIDInputOpen: false }) }}
+
                         open={this.state.keepIDInputOpen ? true : undefined}
                     >
                         <Input placeholder="Item ID" />
