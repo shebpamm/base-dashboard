@@ -8,7 +8,7 @@ import itemComponent from './itemComponent';
 import energyComponent from './energyComponent';
 
 
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Space } from 'antd';
 const { Header, Content } = Layout;
 
 
@@ -37,14 +37,18 @@ render() {
   return (
     <div className="App">
         <Layout>
-          <Header>
-             <Menu theme="dark" mode="horizontal" onClick={this.handleClick} selectedKeys={[ current.key ]}>
-               { this.pages.map( page => (
-                 <Menu.Item key={page.key}>{page.name}</Menu.Item>
-               )) }
-             </Menu>
-          </Header>
-          <Content><BodyComponent /></Content>
+          <Space direction="vertical" size='large'>
+            <Header>
+              <Menu theme="dark" mode="horizontal" onClick={this.handleClick} selectedKeys={[ current.key ]}>
+                { this.pages.map( page => (
+                  <Menu.Item key={page.key}>{page.name}</Menu.Item>
+                )) }
+              </Menu>
+            </Header>
+            <Content>
+              <BodyComponent />
+            </Content>
+          </Space>
         </Layout>
     </div>
   );
