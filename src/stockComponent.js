@@ -86,7 +86,7 @@ class stockComponent extends React.Component {
     render() {
         return (
             <div>
-                < StockInputComponent addStockItem={this.addStockItem} />
+                < StockInputComponent addStockItem={this.addStockItem.bind(this)} />
                 <Table
                     columns={this.columns}
                     dataSource={ this.state.stock }

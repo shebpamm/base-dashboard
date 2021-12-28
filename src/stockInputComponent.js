@@ -102,7 +102,7 @@ class stockInputComponent extends React.Component {
                 layout="inline"
                 labelCol={{ span: 4 }}
                 ref={this.formRef}
-                onFinish={this.onFinish}
+                onFinish={this.onFinish.bind(this)}
             >
                 <Form.Item rules={this.itemRules} name="displayName">
                     <Input placeholder="Display Name"></Input>
@@ -111,7 +111,7 @@ class stockInputComponent extends React.Component {
                     <AutoComplete 
                         style={{ width: 200 }} 
                         options={this.state.itemIDOptions} 
-                        
+
                         onSearch={this.onSearch.bind(this)}
                         onSelect={this.onSelect.bind(this)}
                         onBlur={() => { this.setState({ ...this.state, keepIDInputOpen: false }) }}
