@@ -59,6 +59,21 @@ class stockComponent extends React.Component {
         });
     }
 
+    deleteStockItem(itemId) {
+        axios.delete(`https://mc-base.azurewebsites.net/api/stockItems?code=krAXisqkgHEWfgVkwkYAwHyumeE302koi80bw/tuaZXJ/f85DyMqaw==`, {data: {itemId: itemId} })
+        .then(req => {
+            if(req.status === 200) {
+                message.success(req.data);
+                this.setState({ ...this.state, stock: this.state.stock.filter(stockItem => stockItem.itemId !== itemId) })
+            } else {
+                message.error(req.status);
+            }
+        })
+        .catch(err => {
+            message.error(err.response.data);
+        });
+    }
+
     componentDidMount() {
         this.fetchData();
     }
@@ -67,7 +82,11 @@ class stockComponent extends React.Component {
         return (
             <div>
                 < StockInputComponent addStockItem={this.addStockItem.bind(this)} />
-                < StockTableComponent updateStockItem={this.updateStockItem.bind(this)} data={this.state.stock} loading={this.state.isFetching} />
+                < StockTableComponent 
+                    deleteStockItem={this.deleteStockItem.bind(this)}
+                    updateStockItem={this.updateStockItem.bind(this)} 
+                    data={this.state.stock} 
+                    loading={this.state.isFetching} />
             </div>
         )
     }
