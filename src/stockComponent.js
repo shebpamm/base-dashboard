@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React from 'react';
-import { message, Table , Avatar, Space} from 'antd';
+import { message, Table , Avatar, Space, Input, InputNumber, Form} from 'antd';
 
 import StockInputComponent from './stockInputComponent';
+import StockTableComponent from './stockTableComponent';
 
 class stockComponent extends React.Component {
 
@@ -14,56 +15,10 @@ class stockComponent extends React.Component {
         };
     }
 
-    columns = [
-        {
-            title: 'Icon',
-            dataIndex: 'iconUrl',
-            key: 'icon',
-            render: url => (
-                <Avatar src={url} shape='square' style={{ imageRendering: 'pixelated' }}/>
-            ),
-        },
-        {
-            title: 'Name',
-            dataIndex: 'displayName',
-            key: 'displayName',
-        },
-        {
-            title: 'Item ID',
-            dataIndex: 'itemId',
-            key: 'itemId',
-        },
-        {
-            title: 'Quantity',
-            dataIndex: 'minQuantity',
-            key: 'minQuantity',
-        },
-        {
-            title: 'Batch Size',
-            dataIndex: 'batchSize',
-            key: 'batchSize',
-        },
-        {
-            title: 'Actions',
-            key: 'action',
-            render: () => {
-            return (<Space size="middle">
-                <a>Edit</a>
-                <a>Delete</a>
-            </Space>
-            )},
-        }
-    ];
-
     fetchData() {
         this.setState({ ...this.state, isFetching: true })
         axios.get('https://mc-base.azurewebsites.net/api/stockItems?code=krAXisqkgHEWfgVkwkYAwHyumeE302koi80bw/tuaZXJ/f85DyMqaw==').then( req => {
-            const stockData = req.data.map( item => {
-                return { 
-                    ...item, 
-                    iconUrl: 'https://minecraftresources.blob.core.windows.net/icons/' + encodeURIComponent(item.itemId) + '.png',
-                }
-            })
+            const stockData = req.data;
             this.setState({ ...this.state, isFetching: false, stock: stockData })
         }) 
     }
@@ -91,12 +46,7 @@ class stockComponent extends React.Component {
         return (
             <div>
                 < StockInputComponent addStockItem={this.addStockItem.bind(this)} />
-                <Table
-                    columns={this.columns}
-                    dataSource={ this.state.stock }
-                    loading={ this.state.isFetching }
-                    rowKey={record => record.itemId}
-                ></Table>
+                < StockTableComponent data={this.state.stock} loading={this.state.isFetching} />
             </div>
         )
     }
