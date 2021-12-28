@@ -38,6 +38,27 @@ class stockComponent extends React.Component {
         });
     }
 
+    updateStockItem(item) {
+        axios.put('https://mc-base.azurewebsites.net/api/stockItems?code=krAXisqkgHEWfgVkwkYAwHyumeE302koi80bw/tuaZXJ/f85DyMqaw==', item)
+        .then(req => {
+            if(req.status === 200) {
+                message.success(req.data);
+                this.setState({ ...this.state, stock: this.state.stock.map(stockItem => {
+                    if(stockItem.itemId === item.itemId) {
+                        return item;
+                    } else {
+                        return stockItem;
+                    }
+                })})
+            } else {
+                message.error(req.status);
+            }
+        })
+        .catch(err => {
+            message.error(err.response.data);
+        });
+    }
+
     componentDidMount() {
         this.fetchData();
     }
@@ -46,7 +67,7 @@ class stockComponent extends React.Component {
         return (
             <div>
                 < StockInputComponent addStockItem={this.addStockItem.bind(this)} />
-                < StockTableComponent data={this.state.stock} loading={this.state.isFetching} />
+                < StockTableComponent updateStockItem={this.updateStockItem.bind(this)} data={this.state.stock} loading={this.state.isFetching} />
             </div>
         )
     }
