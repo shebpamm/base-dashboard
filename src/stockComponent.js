@@ -69,13 +69,17 @@ class stockComponent extends React.Component {
     }
 
     addStockItem(item) {
-        axios.post('https://mc-base.azurewebsites.net/api/stockItems?code=krAXisqkgHEWfgVkwkYAwHyumeE302koi80bw/tuaZXJ/f85DyMqaw==', item).then(req => {
+        axios.post('https://mc-base.azurewebsites.net/api/stockItems?code=krAXisqkgHEWfgVkwkYAwHyumeE302koi80bw/tuaZXJ/f85DyMqaw==', item)
+        .then(req => {
             if(req.status === 200) {
                 message.success(req.data);
                 this.setState({ ...this.state, stock: [...this.state.stock, item] })
             } else {
                 message.error(req.status);
             }
+        })
+        .catch(err => {
+            message.error(err.response.data);
         });
     }
 
